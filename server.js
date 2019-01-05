@@ -8,7 +8,7 @@ const items = require('./routes/api/items');
 const app = express();
 
 app.use(bodyParser.json());
-// Db config
+// Serve static asset s if in production
 let db;
 if(process.env.NODE_ENV === 'production') {
   db = process.env.mongoURI;
@@ -32,10 +32,6 @@ mongoose
   });
 
 app.use('/api/items', items);
-
-// Serve static asset s if in production
-
-
 
 const port = process.env.PORT || 5000;
 
