@@ -10,6 +10,17 @@ const app = express();
 app.use(bodyParser.json());
 // Db config
 let db;
+if(process.env.NODE_ENV === 'production') {
+  db = process.env.mongoURI;
+  //Set static folder
+  app.use(express.static('client/build'));
+
+  app.get('*', (req,res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  })
+} else {
+  db = require('./config/keys').mongoURI;
+}
 
 mongoose
   .connect(db, {useNewUrlParser: true})
@@ -24,17 +35,7 @@ app.use('/api/items', items);
 
 // Serve static asset s if in production
 
-if(process.env.NODE_ENV === 'production') {
-  db = process.env.mongoURI;
-  //Set static folder
-  app.use(express.static('client/build'));
 
-  app.get('*', (req,res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  })
-} else {
-  db = require('./config/keys').mongoURI;
-}
 
 const port = process.env.PORT || 5000;
 
