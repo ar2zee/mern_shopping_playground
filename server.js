@@ -8,6 +8,7 @@ const items = require('./routes/api/items');
 const app = express();
 
 app.use(bodyParser.json());
+app.use('/api/items', items);
 // Serve static asset s if in production
 let db;
 if(process.env.NODE_ENV === 'production') {
@@ -30,8 +31,6 @@ mongoose
   .catch(err => {
     console.log("Error: ", err);
   });
-
-app.use('/api/items', items);
 
 const port = process.env.PORT || 5000;
 
